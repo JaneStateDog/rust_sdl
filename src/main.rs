@@ -22,9 +22,9 @@ pub fn main() {
         .build()
         .unwrap();
 
-    let win = Window::new(&sdl_context, String::from("test"), 10, 10);
-    let mut s = Surface::new(512, 512, sdl2::pixels::PixelFormatEnum::RGB24).unwrap();
-    let mut c: sdl2::render::Canvas<Surface> = sdl2::render::Canvas::from_surface(s).unwrap();
+    let win = Window::new(&sdl_context, "test", 10, 10);
+    //let mut s = Surface::new(512, 512, sdl2::pixels::PixelFormatEnum::RGB24).unwrap();
+    //let mut c: sdl2::render::Canvas<Surface> = sdl2::render::Canvas::from_surface(s).unwrap();
 
     let mut canvas = window.into_canvas()
         .build()
