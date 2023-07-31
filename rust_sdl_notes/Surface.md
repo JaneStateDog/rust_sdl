@@ -1,0 +1,3 @@
+A surface is something you can draw to. You can draw sprites, shapes, single pixels, etc. to surfaces. You can also draw a surface onto another surfaces. The main [[Window]] is a surface itself.
+
+Rust's SDL2 has fancy stuff like canvases and such. Maybe there is a better way to implement what I want that is not just "surfaces". Maybe splitting into surfaces and canvases is better. I don't really know, so I am going to do what I want, lol.

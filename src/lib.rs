@@ -1,123 +1,174 @@
 use std::{
-    thread,
     time,
+    ops::{
+        Add,
+        Sub,
+    },
 };
+
+// -- VECTOR2 --
+#[derive(Clone, Copy)]
+pub struct Vector2(
+    pub i32, 
+    pub i32,
+);
+
+impl Add for Vector2 {
+    type Output = Self;
+
+    fn add(self, other: Self) -> Self {
+        Self(self.0 + other.0, self.1 + other.1)
+    }
+}
+
+impl Sub for Vector2 {
+    type Output = Self;
+
+    fn sub(self, other: Self) -> Self {
+        Self(self.0 - other.0, self.1 - other.1)
+    }
+}
+// --
+
+// -- ENGINE --
+pub struct Engine {
+    sdl_context: sdl2::Sdl,
+
+    windows: Vec<Box<Window>>,
+    systems: Vec<fn()>,
+}
+
+impl Engine {
+    pub fn new() -> Self {
+        let sdl_context = sdl2::init().unwrap();
+
+        let windows: Vec<Box<Window>> = Vec::new();
+        let systems: Vec<fn()> = Vec::new();
+
+        Self {
+            sdl_context,
+
+            windows,
+            systems,
+        }
+    }
+
+    pub fn add_systems(&mut self, systems: &[fn()]) {
+        for system in systems {
+            self.systems.push(*system);
+        }
+    }
+
+    fn update(&self) {
+        for system in &self.systems{
+            system();
+        }
+    }
+
+    fn render(&self) {
+        for window in &self.windows {
+            window.render();
+        }
+    }
+}
+// --
 
 // -- CLOCK --
 pub struct Clock {
-    dt_nano: f64,
-    dt_milli: f64,
-    dt_sec: f64,
+    pub target_fps: u32,
+    pub target_ups: u32,
     fps: f64,
+    ups: f64,
 
     now: time::Instant,
 }
 
 impl Clock {
-    pub fn new() -> Clock {
-        Clock {
-            dt_nano: 0.0,
-            dt_milli: 0.0,
-            dt_sec: 0.0,
-            fps: 0.0,
+    pub fn new(target_fps: u32, target_ups: u32) -> Self {
+        Self {
+            target_fps,
+            target_ups,
+            fps: target_fps as f64, // This is probably not needed and can just be 0.0
+            ups: target_ups as f64,
+
             now: time::Instant::now(),
         }
     }
-
-    pub fn tick(&mut self, target_fps: u32) {
-        thread::sleep(time::Duration::from_nanos(
-            (
-                (1_000_000_000.0 / target_fps as f64) - self.now.elapsed().as_nanos() as f64
-            ) as u64
-        ));
-
-        self.dt_nano = self.now.elapsed().as_nanos() as f64;
-        self.dt_milli = self.dt_nano / 1_000_000.0;
-        self.dt_sec = self.dt_milli / 1_000.0;
-
-        self.fps = 1.0 / self.dt_sec;
-
-        self.now = time::Instant::now();
-    }
-
-    pub fn get_dt_nano(&self) -> &f64 { &self.dt_nano }
-    pub fn get_dt_milli(&self) -> &f64 { &self.dt_milli }
-    pub fn get_dt_sec(&self) -> &f64 { &self.dt_sec }
-    pub fn get_fps(&self) -> &f64 { &self.fps }
 }
+// --
+
+// -- SURFACE
+pub struct Surface {
+    size: Vector2,
+}
+
+impl Surface {
+    pub fn new(size: Vector2) -> Self {
+        Self {
+            size,
+        }
+    }
+}
+// --
 
 // -- WINDOW --
 pub struct Window {
+    size: Vector2,
     title: String,
-    width: u32,
-    height: u32,
 
-    video_subsystem: sdl2::VideoSubsystem,
+    sdl_video_subsystem: sdl2::VideoSubsystem,
     sdl_window: sdl2::video::Window,
+
+    surface: Surface,
 }
 
 impl Window {
-    pub fn new(sdl_context: &sdl2::Sdl, title: &str, width: u32, height: u32) -> Window {
-        let video_subsystem = sdl_context.video().unwrap();
-        let sdl_window = video_subsystem.window(&title, width, height)
+    pub fn new(self, engine: &mut Engine, title: &str, size: Vector2) -> Self {
+        let sdl_video_subsystem = engine.sdl_context.video().unwrap(); // We can get sdl_context from the engine
+        // without it being public because this function is defined in the same scope as the engine.
+        // Please keep this in mind, Jane, because I feel like you'll almost certainly move stuff around
+        // and then wonder why it's not working, lmao.
+        let sdl_window = sdl_video_subsystem.window(title, size.0 as u32, size.1 as u32)
             .position_centered()
             .build()
             .unwrap();
 
-        Window {
+        let surface = Surface::new(size);
+
+        engine.windows.push(Box::new(self));
+
+        Self {
+            size,
             title: String::from(title),
-            width,
-            height,
 
-            video_subsystem,
+            sdl_video_subsystem,
             sdl_window,
+
+            surface,
         }
     }
 
-    pub fn get_title(&self) -> &String { &self.title }
-    pub fn get_width(&self) -> &u32 { &self.width }
-    pub fn get_height(&self) -> &u32 { &self.height }
-
-    pub fn get_sdl_window(&self) -> &sdl2::video::Window { &self.sdl_window }
-}
-
-// -- SURFACE --
-pub struct Surface {
-
-}
-
-impl Surface {
-
-}
-
-// -- STATE --
-pub struct State {
-    sdl_context: sdl2::Sdl,
-    events: sdl2::EventPump,
-    window: Window,
-    clock: Clock,
-}
-
-impl State {
-    pub fn new() -> State {
-        let sdl_context = sdl2::init().unwrap();
-        let events = sdl_context.event_pump().unwrap();
-        let window = Window::new(&sdl_context, "rust_sdl", 1280, 720);
-        let clock = Clock::new();
-
-        State {
-            sdl_context,
-            events,
-            window,
-            clock,
-        }
-    }
-
-    pub fn update(&mut self) {
-
-    }
-
-    pub fn render(&mut self) {
-
+    pub fn render(&self) {
+        
     }
 }
+// --
+
+// -- ENTITY --
+pub struct Entity {
+    components: Vec<Box<dyn Component>>,
+}
+// --
+
+// -- COMPONENT --
+pub trait Component {
+    
+}
+
+pub struct TestComponent {
+
+}
+impl Component for TestComponent {
+
+}
+// --

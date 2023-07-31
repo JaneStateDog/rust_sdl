@@ -1,19 +1,17 @@
-use sdl2::{
-    pixels::Color,
-    event::Event,
-    keyboard::Keycode,
-    keyboard::Scancode,
-    rect::Rect, surface::Surface,
-};
+//const TARGET_FPS: u32 = 60;
 
-use rust_sdl::{
-    Clock,
-    Window,
-};
-
-const TARGET_FPS: u32 = 60;
+fn test() {
+    println!("test");
+}
 
 pub fn main() {
+    let mut engine = rust_sdl::Engine::new();
+    engine.add_systems(&[test]);
+
+    //let engine = Engine::new();
+    //let window = Window::new(&engine, "test", test_vec_3);
+
+    /*
     let sdl_context = sdl2::init().unwrap();
     let video_subsystem = sdl_context.video().unwrap();
 
@@ -22,10 +20,10 @@ pub fn main() {
         .build()
         .unwrap();
 
-    let win = Window::new(&sdl_context, "test", 10, 10);
+    //let win = Window::new(&sdl_context, "test", 10, 10);
     //let mut s = Surface::new(512, 512, sdl2::pixels::PixelFormatEnum::RGB24).unwrap();
     //let mut c: sdl2::render::Canvas<Surface> = sdl2::render::Canvas::from_surface(s).unwrap();
-
+    
     let mut canvas = window.into_canvas()
         .build()
         .unwrap();
@@ -65,4 +63,5 @@ pub fn main() {
         clock.tick(TARGET_FPS);
         println!("{}", clock.get_dt_milli());
     }
+    */
 }

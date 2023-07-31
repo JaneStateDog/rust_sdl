@@ -1,0 +1,1 @@
+The clock is split into two parts, the FPS (frames per second) and UPS (updates per second.) FPS is how often we are drawing to the screen, while UPS is how often we are updating the game loop. The clock contains a `target_fps` and `target_ups` which it will always try its best to aim for.

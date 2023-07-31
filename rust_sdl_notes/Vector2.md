@@ -1,0 +1,1 @@
+Simply contains two integer values, `x` and `y`.

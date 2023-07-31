@@ -1,0 +1,1 @@
+A [[System]] is something that can look at all [[Entity]]s with specific [[Component]](s) and change the data of said [[Component]](s).
