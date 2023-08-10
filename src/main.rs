@@ -1,12 +1,42 @@
+use engine::{
+    Engine,
+    Window,
+    Vector2,
+    Component,
+    Entity,
+};
+
 //const TARGET_FPS: u32 = 60;
 
-fn test() {
+pub struct Player {
+    move_speed: i32,
+}
+impl Component for Player {}
+
+pub struct Position {
+    pos: Vector2,
+}
+impl Component for Position {}
+
+pub fn move_player(player: Player, pos: Position) {
     println!("test");
 }
 
 pub fn main() {
-    let mut engine = rust_sdl::Engine::new();
-    engine.add_systems(&[test]);
+    let mut engine = Engine::new();
+    //engine.add_systems(&[move_player]);
+
+    let window = Window::new(&mut engine, "Test", Vector2(1280, 720));
+    engine.add_window(window);
+
+    engine.spawn(vec![
+        &Player { move_speed: 500 },
+        &Position { pos: Vector2(50, 50) },
+    ]);
+
+    //let params = get_parameter_types!(move_player);
+    //println!("{:?}", params);
+    //println!("woo");
 
     //let engine = Engine::new();
     //let window = Window::new(&engine, "test", test_vec_3);

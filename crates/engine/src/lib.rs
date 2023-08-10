@@ -31,25 +31,22 @@ impl Sub for Vector2 {
 // --
 
 // -- ENGINE --
-pub struct Engine {
+pub struct Engine<'a> {
     sdl_context: sdl2::Sdl,
 
-    windows: Vec<Box<Window>>,
+    windows: Vec<Window>,
     systems: Vec<fn()>,
+    entities: Vec<Entity<'a>>,
 }
 
-impl Engine {
+impl<'a> Engine<'a> {
     pub fn new() -> Self {
-        let sdl_context = sdl2::init().unwrap();
-
-        let windows: Vec<Box<Window>> = Vec::new();
-        let systems: Vec<fn()> = Vec::new();
-
         Self {
-            sdl_context,
+            sdl_context: sdl2::init().unwrap(),
 
-            windows,
-            systems,
+            windows: Vec::new(),
+            systems: Vec::new(),
+            entities: Vec::new(),
         }
     }
 
@@ -59,6 +56,18 @@ impl Engine {
         }
     }
 
+    pub fn spawn(&mut self, components: Vec<&'a dyn Component>) {
+        self.entities.push(Entity {
+            components
+        });
+    }
+
+    pub fn add_window(&mut self, window: Window) {
+        self.windows.push(window);
+    }
+
+
+    // --- RUN ON GAME TICK ---
     fn update(&self) {
         for system in &self.systems{
             system();
@@ -123,19 +132,16 @@ pub struct Window {
 }
 
 impl Window {
-    pub fn new(self, engine: &mut Engine, title: &str, size: Vector2) -> Self {
+    pub fn new(engine: &mut Engine, title: &str, size: Vector2) -> Self {
         let sdl_video_subsystem = engine.sdl_context.video().unwrap(); // We can get sdl_context from the engine
         // without it being public because this function is defined in the same scope as the engine.
         // Please keep this in mind, Jane, because I feel like you'll almost certainly move stuff around
         // and then wonder why it's not working, lmao.
+
         let sdl_window = sdl_video_subsystem.window(title, size.0 as u32, size.1 as u32)
             .position_centered()
             .build()
             .unwrap();
-
-        let surface = Surface::new(size);
-
-        engine.windows.push(Box::new(self));
 
         Self {
             size,
@@ -144,7 +150,7 @@ impl Window {
             sdl_video_subsystem,
             sdl_window,
 
-            surface,
+            surface: Surface::new(size),
         }
     }
 
@@ -155,8 +161,16 @@ impl Window {
 // --
 
 // -- ENTITY --
-pub struct Entity {
-    components: Vec<Box<dyn Component>>,
+pub struct Entity<'a> {
+    pub components: Vec<&'a dyn Component>,
+}
+
+impl<'a> Entity<'a> {
+    pub fn new() -> Self {
+        Self {
+            components: Vec::new(),
+        }
+    }
 }
 // --
 
@@ -164,11 +178,9 @@ pub struct Entity {
 pub trait Component {
     
 }
-
-pub struct TestComponent {
-
-}
-impl Component for TestComponent {
-
-}
 // --
+
+// -- SYSTEM --
+pub struct System {
+    wanted_components: Vec<syn::Type>,
+}
