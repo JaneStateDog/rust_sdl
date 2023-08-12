@@ -162,7 +162,7 @@ impl Window {
 
 // -- ENTITY --
 pub struct Entity<'a> {
-    pub components: Vec<&'a dyn Component>,
+    components: Vec<&'a dyn Component>,
 }
 
 impl<'a> Entity<'a> {
@@ -176,11 +176,12 @@ impl<'a> Entity<'a> {
 
 // -- COMPONENT --
 pub trait Component {
-    
+    fn get_name(&self) -> String;
 }
 // --
 
 // -- SYSTEM --
 pub struct System {
-    wanted_components: Vec<syn::Type>,
+    wanted_components: Vec<String>,
+    function: dyn Fn(),
 }

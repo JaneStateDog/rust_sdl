@@ -1,5 +1,5 @@
 [package]
-name = "macros"
+name = "engine_derive"
 version = "0.1.0"
 edition = "2021"
 
@@ -8,4 +8,4 @@ proc-macro = true
 
 [dependencies]
 quote = "1.0.32"
-syn = { version = "2.0.28", features = ["full"] }
+syn = "2.0.28"

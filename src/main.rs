@@ -3,20 +3,21 @@ use engine::{
     Window,
     Vector2,
     Component,
-    Entity,
 };
+
+use engine_derive::Component;
 
 //const TARGET_FPS: u32 = 60;
 
+#[derive(Component)]
 pub struct Player {
     move_speed: i32,
 }
-impl Component for Player {}
 
+#[derive(Component)]
 pub struct Position {
     pos: Vector2,
 }
-impl Component for Position {}
 
 pub fn move_player(player: Player, pos: Position) {
     println!("test");
@@ -29,10 +30,13 @@ pub fn main() {
     let window = Window::new(&mut engine, "Test", Vector2(1280, 720));
     engine.add_window(window);
 
-    engine.spawn(vec![
+    let test = Position { pos: Vector2(2, 2) };
+    println!("{}", test.get_name());
+
+    /*engine.spawn(vec![
         &Player { move_speed: 500 },
         &Position { pos: Vector2(50, 50) },
-    ]);
+    ]);*/
 
     //let params = get_parameter_types!(move_player);
     //println!("{:?}", params);

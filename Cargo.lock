@@ -33,8 +33,15 @@ dependencies = [
 name = "engine"
 version = "0.1.0"
 dependencies = [
- "macros",
  "sdl2",
+ "syn",
+]
+
+[[package]]
+name = "engine_derive"
+version = "0.1.0"
+dependencies = [
+ "quote",
  "syn",
 ]
 
@@ -49,14 +56,6 @@ name = "libc"
 version = "0.2.147"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b4668fb0ea861c1df094127ac5f1da3409a82116a4ba74fca2e58ef927159bb3"
-
-[[package]]
-name = "macros"
-version = "0.1.0"
-dependencies = [
- "quote",
- "syn",
-]
 
 [[package]]
 name = "proc-macro2"
@@ -81,7 +80,7 @@ name = "rust_sdl"
 version = "0.1.0"
 dependencies = [
  "engine",
- "macros",
+ "engine_derive",
 ]
 
 [[package]]
