@@ -1,1 +1,0 @@
-A [[Component]] is part of an [[Entity]] and stores some form of data that can be read and altered by [[System]]s.

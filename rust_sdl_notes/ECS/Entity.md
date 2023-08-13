@@ -1,1 +1,0 @@
-An [[Entity]] is made up of [[Component]]s.

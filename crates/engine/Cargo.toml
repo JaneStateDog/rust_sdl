@@ -5,4 +5,3 @@ edition = "2021"
 
 [dependencies]
 sdl2 = { version = "0.35.2", features = ["bundled"] }
-syn = { version = "2.0.28", features = ["full"] }

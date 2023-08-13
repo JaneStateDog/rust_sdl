@@ -1,11 +1,12 @@
 use engine::{
-    Engine,
-    Window,
-    Vector2,
-    Component,
+    useful::Vector2,
+    component::*,
+    window::Window,
+    engine::Engine,
+    system::System,
 };
 
-use engine_derive::Component;
+use engine_macros::*;
 
 //const TARGET_FPS: u32 = 60;
 
@@ -19,19 +20,21 @@ pub struct Position {
     pos: Vector2,
 }
 
-pub fn move_player(player: Player, pos: Position) {
-    println!("test");
+pub fn move_player(test: &str) {
+    println!("{}", test);
 }
 
 pub fn main() {
     let mut engine = Engine::new();
-    //engine.add_systems(&[move_player]);
 
     let window = Window::new(&mut engine, "Test", Vector2(1280, 720));
     engine.add_window(window);
 
-    let test = Position { pos: Vector2(2, 2) };
-    println!("{}", test.get_name());
+    let sy = System {
+        wanted_components: vec![ComponentName("Person"), ComponentName("Position")], 
+        function: move_player,
+    };
+    (sy.function)("woooff woof!!");
 
     /*engine.spawn(vec![
         &Player { move_speed: 500 },

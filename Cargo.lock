@@ -34,11 +34,10 @@ name = "engine"
 version = "0.1.0"
 dependencies = [
  "sdl2",
- "syn",
 ]
 
 [[package]]
-name = "engine_derive"
+name = "engine_macros"
 version = "0.1.0"
 dependencies = [
  "quote",
@@ -80,7 +79,7 @@ name = "rust_sdl"
 version = "0.1.0"
 dependencies = [
  "engine",
- "engine_derive",
+ "engine_macros",
 ]
 
 [[package]]
