@@ -5,23 +5,20 @@ use engine::{
     engine::Engine,
     system::System,
 };
-
 use engine_macros::*;
+
+use std::rc::Rc;
 
 //const TARGET_FPS: u32 = 60;
 
-#[derive(Component)]
+#[derive(Component, Debug)]
 pub struct Player {
     move_speed: i32,
 }
 
-#[derive(Component)]
+#[derive(Component, Debug)]
 pub struct Position {
     pos: Vector2,
-}
-
-pub fn move_player(test: &str) {
-    println!("{}", test);
 }
 
 pub fn main() {
@@ -31,15 +28,23 @@ pub fn main() {
     engine.add_window(window);
 
     let sy = System {
-        wanted_components: vec![ComponentName("Person"), ComponentName("Position")], 
-        function: move_player,
+        wanted_components: vec![ComponentName::new("Player"), ComponentName::new("Position")], 
+        function: |test: &str| println!("{}", test),
     };
-    (sy.function)("woooff woof!!");
 
-    /*engine.spawn(vec![
-        &Player { move_speed: 500 },
-        &Position { pos: Vector2(50, 50) },
-    ]);*/
+    engine.spawn(vec![
+        Rc::new(Position { pos: Vector2(1, 50) }),
+        Rc::new(Player { move_speed: 5 }),
+        Rc::new(Position { pos: Vector2(50, 4) }),
+        Rc::new(Position { pos: Vector2(2, 50) }),
+        Rc::new(Player { move_speed: 500 }),
+    ]);
+
+    let components = sy.get_components(&engine);
+    for component in components.as_slice() {
+        println!("{}", component.get_name());
+    }
+    println!("{:?}", components);
 
     //let params = get_parameter_types!(move_player);
     //println!("{:?}", params);

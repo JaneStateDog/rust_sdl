@@ -4,6 +4,7 @@ use crate::{
     engine::Engine,
 };
 
+#[allow(dead_code)]
 pub struct Window {
     size: Vector2,
     title: String,

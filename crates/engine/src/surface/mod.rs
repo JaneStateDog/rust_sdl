@@ -1,5 +1,6 @@
 use crate::useful::Vector2;
 
+#[allow(dead_code)]
 pub struct Surface {
     size: Vector2,
 }

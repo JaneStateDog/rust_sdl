@@ -3,7 +3,7 @@ use core::ops::{
     Sub,
 };
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug)]
 pub struct Vector2(pub i32, pub i32);
 
 impl Add for Vector2 {

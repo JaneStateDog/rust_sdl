@@ -1,13 +1,15 @@
 use crate::component::Component;
 
-pub struct Entity<'a> {
-    pub components: Vec<&'a dyn Component>,
+use std::rc::Rc;
+
+pub struct Entity {
+    pub components: Vec<Rc<dyn Component>>,
 }
 
-impl<'a> Entity<'a> {
-    pub fn new() -> Self {
+impl Entity {
+    pub fn new(components: Vec<Rc<dyn Component>>) -> Self {
         Self {
-            components: Vec::new(),
+            components,
         }
     }
 }

@@ -1,14 +1,27 @@
-use crate::component::*;
+use crate::{
+    component::*,
+    engine::Engine,
+};
 
-pub struct System<'a, T> {
-    pub wanted_components: Vec<ComponentName<'a>>,
+use std::rc::Rc;
+
+pub struct System<T> {
+    pub wanted_components: Vec<ComponentName>,
     pub function: fn(T),
 }
 
-impl<'a, T> System<'a, T> {
-    pub fn get_components(&self) -> Vec<&dyn Component> {
-        // TODO: Get a list of the components that follow our wanted component types
+impl<T> System<T> {
+    pub fn get_components(&self, engine: &Engine) -> Vec<Rc<dyn Component>> {
+        let mut components: Vec<Rc<dyn Component>> = Vec::new();
 
-        Vec::new()
+        for component in engine.get_components() {
+            for wanted_component in self.wanted_components.iter() {
+                if component.get_name() == *wanted_component {
+                    components.push(Rc::clone(component));
+                }
+            }
+        }
+
+        components
     }
 }

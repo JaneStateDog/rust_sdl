@@ -1,5 +1,6 @@
 use std::time;
 
+#[allow(dead_code)]
 pub struct Clock {
     pub target_fps: u32,
     pub target_ups: u32,

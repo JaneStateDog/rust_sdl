@@ -17,7 +17,7 @@ fn impl_component(ast: &DeriveInput) -> TokenStream {
     quote! {
         impl Component for #name {
             fn get_name(&self) -> ComponentName {
-                ComponentName(stringify!(#name))
+                ComponentName::new(stringify!(#name))
             }
         }
     }.into()
