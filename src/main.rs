@@ -1,5 +1,5 @@
 use engine::{
-    useful::Vector2,
+    useful::Vec2,
     component::*,
     window::Window,
     engine::Engine,
@@ -13,38 +13,39 @@ use std::rc::Rc;
 
 #[derive(Component, Debug)]
 pub struct Player {
-    move_speed: i32,
+    pub move_speed: i32,
 }
 
 #[derive(Component, Debug)]
 pub struct Position {
-    pos: Vector2,
+    pub pos: Vec2,
 }
 
 pub fn main() {
     let mut engine = Engine::new();
 
-    let window = Window::new(&mut engine, "Test", Vector2(1280, 720));
+    let window = Window::new(&mut engine, "Test", Vec2(1280, 720));
     engine.add_window(window);
 
     let sy = System {
-        wanted_components: vec![ComponentName::new("Player"), ComponentName::new("Position")], 
+        wanted_components: vec![ComponentName("Player"), ComponentName("Position")], 
         function: |test: &str| println!("{}", test),
     };
 
-    engine.spawn(vec![
-        Rc::new(Position { pos: Vector2(1, 50) }),
+    let entity = engine.spawn(vec![
+        Rc::new(Position { pos: Vec2(1, 50) }),
         Rc::new(Player { move_speed: 5 }),
-        Rc::new(Position { pos: Vector2(50, 4) }),
-        Rc::new(Position { pos: Vector2(2, 50) }),
-        Rc::new(Player { move_speed: 500 }),
     ]);
 
-    let components = sy.get_components(&engine);
-    for component in components.as_slice() {
-        println!("{}", component.get_name());
+    //engine.print_components();
+    //engine.print_entities();
+
+    let components = entity.get_components_of_name(ComponentName("Player"));
+    for component in components {
+        let c = component.as_any().downcast_ref::<Player>().unwrap();
     }
-    println!("{:?}", components);
+
+    engine.print_components();
 
     //let params = get_parameter_types!(move_player);
     //println!("{:?}", params);

@@ -30,8 +30,25 @@ impl Engine {
         &self.components
     }
 
+    pub fn get_entities(&self) -> &Vec<Entity> {
+        &self.entities
+    }
+
+    // Printers
+    pub fn print_components(&self) {
+        for component in self.components.iter() {
+            println!("{:?}", component);
+        }
+    }
+
+    pub fn print_entities(&self) {
+        for entity in self.entities.iter() {
+            println!("{:?}", entity);
+        }
+    }
+
     // Adding things
-    pub fn spawn(&mut self, components: Vec<Rc<dyn Component>>) {
+    pub fn spawn(&mut self, components: Vec<Rc<dyn Component>>) -> &Entity {
         let mut entity_components: Vec<Rc<dyn Component>> = Vec::new();
         for component in &components {
             self.components.push(Rc::clone(component));
@@ -39,6 +56,8 @@ impl Engine {
         }
 
         self.entities.push(Entity::new(entity_components));
+
+        &self.entities.last().unwrap()
     }
 
     pub fn add_window(&mut self, window: Window) {

@@ -1,16 +1,10 @@
 use std::fmt;
 
-#[derive(PartialEq, Debug)]
-pub struct ComponentName(pub String);
+#[derive(PartialEq, Eq, Hash, Clone, Copy, Debug)]
+pub struct ComponentName<'a>(pub &'a str);
 
-impl fmt::Display for ComponentName {
+impl<'a> fmt::Display for ComponentName<'a> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "{}", self.0)
-    }
-}
-
-impl ComponentName {
-    pub fn new(name: &str) -> Self {
-        Self(name.into())
     }
 }

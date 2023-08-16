@@ -4,9 +4,9 @@ use core::ops::{
 };
 
 #[derive(Clone, Copy, Debug)]
-pub struct Vector2(pub i32, pub i32);
+pub struct Vec2(pub i32, pub i32);
 
-impl Add for Vector2 {
+impl Add for Vec2 {
     type Output = Self;
 
     fn add(self, other: Self) -> Self {
@@ -14,7 +14,7 @@ impl Add for Vector2 {
     }
 }
 
-impl Sub for Vector2 {
+impl Sub for Vec2 {
     type Output = Self;
 
     fn sub(self, other: Self) -> Self {

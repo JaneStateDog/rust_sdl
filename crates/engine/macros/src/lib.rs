@@ -17,7 +17,11 @@ fn impl_component(ast: &DeriveInput) -> TokenStream {
     quote! {
         impl Component for #name {
             fn get_name(&self) -> ComponentName {
-                ComponentName::new(stringify!(#name))
+                ComponentName(stringify!(#name))
+            }
+
+            fn as_any(&self) -> &dyn std::any::Any {
+                self
             }
         }
     }.into()

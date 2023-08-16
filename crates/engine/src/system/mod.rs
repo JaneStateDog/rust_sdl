@@ -5,12 +5,12 @@ use crate::{
 
 use std::rc::Rc;
 
-pub struct System<T> {
-    pub wanted_components: Vec<ComponentName>,
+pub struct System<'a, T> {
+    pub wanted_components: Vec<ComponentName<'a>>,
     pub function: fn(T),
 }
 
-impl<T> System<T> {
+impl<'a, T> System<'a, T> {
     pub fn get_components(&self, engine: &Engine) -> Vec<Rc<dyn Component>> {
         let mut components: Vec<Rc<dyn Component>> = Vec::new();
 

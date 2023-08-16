@@ -1,12 +1,12 @@
-use crate::useful::Vector2;
+use crate::useful::Vec2;
 
 #[allow(dead_code)]
 pub struct Surface {
-    size: Vector2,
+    size: Vec2,
 }
 
 impl Surface {
-    pub fn new(size: Vector2) -> Self {
+    pub fn new(size: Vec2) -> Self {
         Self {
             size,
         }
